@@ -7,8 +7,9 @@
 #import <Foundation/Foundation.h>
 #import "PWRequest.h"
 
-#define kServiceAddressSSL @"https://cp.pushwoosh.com/json/1.3/"
-#define kServiceAddressNoSSL @"http://cp.pushwoosh.com/json/1.3/"
+//#define kServiceAddressSSL @"https://cp.pushwoosh.com/json/1.3/"
+//#define kServiceAddressNoSSL @"http://cp.pushwoosh.com/json/1.3/"
+
 
 @interface PWRequestManager : NSObject
 

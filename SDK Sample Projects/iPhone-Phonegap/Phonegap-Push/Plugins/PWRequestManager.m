@@ -70,7 +70,7 @@
 	if (response.statusCode != 200 || pushwooshResult != 200)
 	{
 		if(retError && !error)
-			*retError = [NSError errorWithDomain:@"com.pushwoosh" code:response.statusCode userInfo:jsonResult];
+			*retError = [NSError errorWithDomain:@"com.purplepush" code:response.statusCode userInfo:jsonResult];
 
 		return NO;
 	}

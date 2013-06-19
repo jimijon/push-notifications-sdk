@@ -21,7 +21,7 @@
 	var pushNotification = window.plugins.pushNotification;
 	pushNotification.onDeviceReady();
 	
-	pushNotification.registerDevice({alert:true, badge:true, sound:true, pw_appid:"PUSHWOOSH_APP_ID", appname:"Pushwoosh"},
+	pushNotification.registerDevice({alert:true, badge:true, sound:true, pp_appid:"679DB-17774", appname:"PushwooshPurplePush"},
 									function(status) {
 										var deviceToken = status['deviceToken'];
 										console.warn('registerDevice: ' + deviceToken);

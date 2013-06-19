@@ -24,3 +24,9 @@
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
 #endif
+
+
+#define kServiceHtmlContentFormatUrl @"http://10.1.10.16:9090/cgi-bin/WebObjects/PurplePush.woa/ra/content/"
+
+#define kServiceAddressSSL @"https://10.1.10.16:4443/cgi-bin/WebObjects/PurplePush.woa/ra/"
+#define kServiceAddressNoSSL @"http://10.1.10.16:9090/cgi-bin/WebObjects/PurplePush.woa/ra/"

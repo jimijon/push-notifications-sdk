@@ -1,7 +1,7 @@
 //
 //  PushNotificationManager.m
-//  Pushwoosh SDK
-//  (c) Pushwoosh 2012
+//  PurplePush SDK
+//  (c) PurplePush 2012
 //
 
 #import "PushNotificationManager.h"
@@ -25,9 +25,9 @@
 #include <net/if_dl.h>
 #import <CommonCrypto/CommonDigest.h>
 
-#define kServiceHtmlContentFormatUrl @"http://cp.pushwoosh.com/content/%@"
+//#define kServiceHtmlContentFormatUrl @"http://cp.pushwoosh.com/content/%@"
 
-@interface UIApplication(Pushwoosh)
+@interface UIApplication(PurplePush)
 - (void) pw_setApplicationIconBadgeNumber:(NSInteger) badgeNumber;
 @end
 
@@ -166,9 +166,9 @@ static PushNotificationManager * instance = nil;
 		pushNotifications = [[NSMutableDictionary alloc] init];
 		showPushnotificationAlert = TRUE;
 		
-		[[NSUserDefaults standardUserDefaults] setObject:_appCode forKey:@"Pushwoosh_APPID"];
+		[[NSUserDefaults standardUserDefaults] setObject:_appCode forKey:@"PurplePush_APPID"];
 		if(_appName) {
-			[[NSUserDefaults standardUserDefaults] setObject:_appName forKey:@"Pushwoosh_APPNAME"];
+			[[NSUserDefaults standardUserDefaults] setObject:_appName forKey:@"PurplePush_APPNAME"];
 		}
 		
 		//initalize location tracker
@@ -194,10 +194,10 @@ static PushNotificationManager * instance = nil;
 }
 
 + (void)initializeWithAppCode:(NSString *)appCode appName:(NSString *)appName {
-	[[NSUserDefaults standardUserDefaults] setObject:appCode forKey:@"Pushwoosh_APPID"];
+	[[NSUserDefaults standardUserDefaults] setObject:appCode forKey:@"PurplePush_APPID"];
 	
 	if(appName) {
-		[[NSUserDefaults standardUserDefaults] setObject:appName forKey:@"Pushwoosh_APPNAME"];
+		[[NSUserDefaults standardUserDefaults] setObject:appName forKey:@"PurplePush_APPNAME"];
 	}
 }
 
@@ -230,7 +230,7 @@ static PushNotificationManager * instance = nil;
 	NSString * apsGateway = [entitlements objectForKey:@"aps-environment"];
 	
 	if(!apsGateway) {
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Pushwoosh Error" message:@"Your provisioning profile does not have APS entry. Please make your profile push compatible." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"PurplePush Error" message:@"Your provisioning profile does not have APS entry. Please make your profile push compatible." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
 		[alert show];
 		[alert release];
 	}
@@ -244,12 +244,12 @@ static PushNotificationManager * instance = nil;
 + (NSString *) getAppIdFromBundle:(BOOL)productionAPS {
 	NSString * appid = nil;
 	if(!productionAPS) {
-		appid = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Pushwoosh_APPID_Dev"];
+		appid = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"PurplePush_APPID_Dev"];
 		if(appid)
 			return appid;
 	}
 	
-	return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Pushwoosh_APPID"];
+	return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"PurplePush_APPID"];
 }
 
 + (PushNotificationManager *)pushManager {
@@ -257,16 +257,16 @@ static PushNotificationManager * instance = nil;
 		NSString * appid = [self getAppIdFromBundle:[self getAPSProductionStatus]];
 		
 		if(!appid) {
-			appid = [[NSUserDefaults standardUserDefaults] objectForKey:@"Pushwoosh_APPID"];
+			appid = [[NSUserDefaults standardUserDefaults] objectForKey:@"PurplePush_APPID"];
 
 			if(!appid) {
 				return nil;
 			}
 		}
 		
-		NSString * appname = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Pushwoosh_APPNAME"];
+		NSString * appname = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"PurplePush_APPNAME"];
 		if(!appname)
-			appname = [[NSUserDefaults standardUserDefaults] objectForKey:@"Pushwoosh_APPNAME"];
+			appname = [[NSUserDefaults standardUserDefaults] objectForKey:@"PurplePush_APPNAME"];
 		
 		if(!appname)
 			appname = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
@@ -376,7 +376,7 @@ static PushNotificationManager * instance = nil;
 
 - (void) handlePushRegistrationString:(NSString *)deviceID {
 	
-	[[NSUserDefaults standardUserDefaults] setObject:deviceID forKey:@"PWPushUserId"];
+	[[NSUserDefaults standardUserDefaults] setObject:deviceID forKey:@"PPushUserId"];
 	
 	[self performSelectorInBackground:@selector(sendDevTokenToServer:) withObject:deviceID];
 }
@@ -389,7 +389,7 @@ static PushNotificationManager * instance = nil;
 	[deviceID replaceOccurrencesOfString:@">" withString:@"" options:1 range:NSMakeRange(0, [deviceID length])];
 	[deviceID replaceOccurrencesOfString:@" " withString:@"" options:1 range:NSMakeRange(0, [deviceID length])];
 	
-	[[NSUserDefaults standardUserDefaults] setObject:deviceID forKey:@"PWPushUserId"];
+	[[NSUserDefaults standardUserDefaults] setObject:deviceID forKey:@"PPushUserId"];
 	
 	[self performSelectorInBackground:@selector(sendDevTokenToServer:) withObject:deviceID];
 }
@@ -401,7 +401,7 @@ static PushNotificationManager * instance = nil;
 }
 
 - (NSString *) getPushToken {
-	return [[NSUserDefaults standardUserDefaults] objectForKey:@"PWPushUserId"];
+	return [[NSUserDefaults standardUserDefaults] objectForKey:@"PPushUserId"];
 }
 
 #pragma mark URL redirect handling flow
@@ -413,7 +413,7 @@ static PushNotificationManager * instance = nil;
 	//When opening nsurlconnection to some url if it has some redirect, then connection will ask delegate what to do.
 	//But if url has no redirects, then THIS CODE WILL NOT WORK.
 	//
-	//Pushwoosh.com guarantee that any http/https url is shorten URL.
+	//PurplePush.com guarantee that any http/https url is shorten URL.
 	//Unshort url and open it by usual way.
 	if ([[url scheme] hasPrefix:@"http"]) {
 		NSURLConnection *connection  = [[NSURLConnection alloc] initWithRequest:[NSMutableURLRequest requestWithURL:url] delegate:self];
@@ -742,7 +742,7 @@ static PushNotificationManager * instance = nil;
 
 //start location tracking. this is battery efficient and uses network triangulation in background
 - (void)startLocationTracking {
-	NSString *modeString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"Pushwoosh_BGMODE"];
+	NSString *modeString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"PurplePush_BGMODE"];
 	[self startLocationTracking:modeString];
 }
 

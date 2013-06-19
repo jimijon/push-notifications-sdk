@@ -4,9 +4,9 @@
 // Based on the Push Notifications Cordova Plugin by Olivier Louvignes on 06/05/12.
 // Modified by Max Konev on 18/05/12.
 //
-// Pushwoosh Push Notifications Plugin for Cordova iOS
+// PurplePush Push Notifications Plugin for Cordova iOS
 // www.pushwoosh.com
-// (c) Pushwoosh 2012
+// (c) PurplePush 2012
 //
 // MIT Licensed
 
@@ -66,17 +66,17 @@
 	if (notificationTypes == UIRemoteNotificationTypeNone)
 		NSLog(@"PushNotification.registerDevice: Push notification type is set to none");
 	
-	NSString *appid = [options objectForKey:@"pw_appid"];
+	NSString *appid = [options objectForKey:@"pp_appid"];
 	NSString *appname = [options objectForKey:@"appname"];
 	
 	if(!appid) {
-		NSLog(@"PushNotification.registerDevice: Missing Pushwoosh App ID");
+		NSLog(@"PushNotification.registerDevice: Missing PurplePush App ID");
 		return;
 	}
 	
-	[[NSUserDefaults standardUserDefaults] setObject:appid forKey:@"Pushwoosh_APPID"];
+	[[NSUserDefaults standardUserDefaults] setObject:appid forKey:@"PurplePush_APPID"];
 	if(appname) {
-		[[NSUserDefaults standardUserDefaults] setObject:appname forKey:@"Pushwoosh_APPNAME"];
+		[[NSUserDefaults standardUserDefaults] setObject:appname forKey:@"PurplePush_APPNAME"];
 	}
 	
 	//we need to re-set APPID if it has been changed (on start we have initialized Push Manager with app id from NSUserDefaults)
